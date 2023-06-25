@@ -38,8 +38,8 @@ public class ejercicio1 {
     System.out.println("\nEdades menores de edad: ");
     mostrarMenoresEdad(menoresEdad, contadorMenores);
 
-    promedio = calcularPromedio(edades, n);
-    System.out.println("\nEdad promedio: " + promedio);
+    System.out.println("\nEdad promedio: ");
+    calcularPromedio(edades, n);
   }
 
   public static int leerN() {
@@ -126,7 +126,7 @@ public class ejercicio1 {
     }
   }
 
-  public static double calcularPromedio(int[] edades, int n) {
+  public static void calcularPromedio(int[] edades, int n) {
     double promedio = 0;
 
     for (int i = 0; i < n; i++) {
@@ -135,10 +135,6 @@ public class ejercicio1 {
 
     promedio /= n;
 
-    return promedio;
-  }
-
-  public static void mostrarPromedio(double promedio) {
     System.out.println("El promedio de edades es: " + promedio);
   }
 }
