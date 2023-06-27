@@ -32,6 +32,7 @@ import java.util.Scanner;
 
 public class App {
   static Scanner input = new Scanner(System.in);
+  static int maxHabitaciones = 100;
 
   public static void main(String[] args) throws Exception {
     bienvenida();
@@ -39,8 +40,6 @@ public class App {
   }
 
   public static void bienvenida() {
-    Scanner input = new Scanner(System.in);
-
     System.out.println("\n***** Bienvenido al sistema de reservas del hotel *****");
     System.out.println("Presione Enter para continuar...");
     input.nextLine();
@@ -55,17 +54,17 @@ public class App {
   }
 
   public static void menu() {
-    int opcion;
+    int opcion = 0;
     boolean salir = false;
     int cantidadHabitaciones = 0;
-    boolean datosIngresados = false; // agregamos esta variable
+    boolean datosIngresados = false;
 
-    int[] idHabitacion = new int[100];
-    String[] nombreHabitacion = new String[100];
-    char[] tipoHabitacion = new char[100];
-    char[] estado = new char[100];
-    int[] nTotalServicios = new int[100];
-    double[] ingresoTotalHabitacion = new double[100];
+    int[] idHabitacion = new int[maxHabitaciones];
+    String[] nombreHabitacion = new String[maxHabitaciones];
+    char[] tipoHabitacion = new char[maxHabitaciones];
+    char[] estado = new char[maxHabitaciones];
+    int[] nTotalServicios = new int[maxHabitaciones];
+    double[] ingresoTotalHabitacion = new double[maxHabitaciones];
 
     while (!salir) {
       System.out.println("\n***** Menú *****");
@@ -82,22 +81,33 @@ public class App {
       System.out.println("11. Fin de servicio");
       System.out.println("12. Terminar el programa");
 
-      System.out.print("\nIngrese una opción: ");
+      System.out.print("Ingrese una opción: ");
+      while (!input.hasNextInt()) {
+        System.out.println("Error: Ingrese un número entero válido.");
+        System.out.print("Ingrese una opción: ");
+        input.next();
+      }
       opcion = input.nextInt();
 
       switch (opcion) {
         case 1:
-          if (!datosIngresados) { // verificamos si los datos ya fueron ingresados
-            ingresarDatos(idHabitacion, nombreHabitacion, tipoHabitacion, estado, nTotalServicios,
-                ingresoTotalHabitacion,
-                cantidadHabitaciones);
-            datosIngresados = true; // cambiamos el valor de datosIngresados a true
+          if (!datosIngresados) {
+            cantidadHabitaciones = ingresarDatos(idHabitacion, nombreHabitacion, tipoHabitacion, estado,
+                nTotalServicios, ingresoTotalHabitacion, cantidadHabitaciones);
+
+            datosIngresados = true;
           } else {
             System.out.println("Ya ingresó los datos. Intente con otra opción.");
           }
           break;
         case 2:
-          reportarDatos();
+          if (datosIngresados) {
+            reportarDatos(idHabitacion, nombreHabitacion, tipoHabitacion, estado, nTotalServicios,
+                ingresoTotalHabitacion,
+                cantidadHabitaciones);
+          } else {
+            System.out.println("No hay datos ingresados. Intente con otra opción.");
+          }
           break;
         case 3:
           agregarDatos();
@@ -130,42 +140,176 @@ public class App {
           salir = true;
           break;
         default:
-          System.out.println("Opción inválida");
+          limpiarPantalla();
+          System.out.println("Opción inválida. Intente con otra opción.");
           break;
       }
     }
   }
 
-  public static void ingresarDatos(int[] idHabitacion, String[] nombreHabitacion, char[] tipoHabitacion, char[] estado,
+  public static int ingresarDatos(int[] idHabitacion, String[] nombreHabitacion, char[] tipoHabitacion, char[] estado,
       int[] nTotalServicios, double[] ingresoTotalHabitacion, int cantidadHabitaciones) {
     limpiarPantalla();
 
-    System.out.print("Ingrese la cantidad de habitaciones: ");
+    System.out.print("Ingrese la cantidad de habitaciones (máximo 100): ");
+    while (!input.hasNextInt()) {
+      System.out.println("Error: Ingrese un número entero válido.");
+      System.out.print("Ingrese la cantidad de habitaciones (máximo 100): ");
+      input.next();
+    }
     cantidadHabitaciones = input.nextInt();
+    while (cantidadHabitaciones <= 0 || cantidadHabitaciones > 100) {
+      System.out.println("Error: Ingrese un número entero válido entre 1 y 100.");
+      System.out.print("Ingrese la cantidad de habitaciones (máximo 100): ");
+      while (!input.hasNextInt()) {
+        System.out.println("Error: Ingrese un número entero válido.");
+        System.out.print("Ingrese la cantidad de habitaciones (máximo 100): ");
+        input.next();
+      }
+      cantidadHabitaciones = input.nextInt();
+    }
 
     for (int i = 0; i < cantidadHabitaciones; i++) {
-      System.out.print("\nIngrese el Id de la habitación: ");
-      idHabitacion[i] = input.nextInt();
+      while (true) {
+        System.out.print("\nId de la habitación (2 dígitos): ");
 
-      System.out.print("Ingrese el nombre de la habitación: ");
-      nombreHabitacion[i] = input.next();
+        while (!input.hasNextInt()) {
+          System.out.println("Error. No ingresó un número entero válido.");
+          System.out.print("Id de la habitación (2 dígitos): ");
+          input.next();
+        }
 
-      System.out.print("Ingrese el tipo de habitación (S, D, T): ");
-      tipoHabitacion[i] = input.next().charAt(0);
+        int id = input.nextInt();
 
-      System.out.print("Ingrese el estado de la habitación (L, O): ");
-      estado[i] = input.next().charAt(0);
+        if (id < 10 || id >= 100) {
+          System.out.println("Error: El Id de la habitación debe tener 2 dígitos.");
+          continue;
+        }
 
-      System.out.print("Ingrese el número total de servicios: ");
-      nTotalServicios[i] = input.nextInt();
+        boolean idExiste = false;
 
-      System.out.print("Ingrese el ingreso total de la habitación: ");
-      ingresoTotalHabitacion[i] = input.nextDouble();
+        for (int j = 0; j < i; j++) {
+          if (id == idHabitacion[j]) {
+            System.out.println("Error: El Id de la habitación ya existe. Ingrese otro Id");
+            idExiste = true;
+
+            break;
+          }
+        }
+
+        if (!idExiste) {
+          idHabitacion[i] = id;
+          break;
+        }
+      }
+
+      while (true) {
+        System.out.print("Nombre de la habitación (máximo 30 caracteres): ");
+        String habitacionNombre = input.next().toUpperCase().trim();
+
+        if (habitacionNombre.length() < 3 || habitacionNombre.length() > 30) {
+          System.out.println("Error: El nombre de la habitación debe tener entre 3 y 30 caracteres.");
+          continue;
+        }
+
+        boolean esNumero = habitacionNombre.matches("\\d+");
+
+        if (esNumero) {
+          System.out.println("Error: El nombre de la habitación no puede contener números. Ingrese otro nombre.");
+          continue;
+        }
+
+        boolean nombreExiste = false;
+
+        for (int j = 0; j < i; j++) {
+          if (habitacionNombre.equals(nombreHabitacion[j])) {
+            System.out.println("Error: El nombre de la habitación ya existe. Ingrese otro nombre.");
+            nombreExiste = true;
+            break;
+          }
+        }
+
+        if (!nombreExiste) {
+          nombreHabitacion[i] = habitacionNombre;
+          break;
+        }
+      }
+
+      while (true) {
+        System.out.print("Tipo de habitación (S=Simple, D=Doble, T=Triple): ");
+        char habitacionTipo = input.next().toUpperCase().charAt(0);
+
+        if (habitacionTipo != 'S' && habitacionTipo != 'D' && habitacionTipo != 'T') {
+          System.out.println("Error: El tipo de habitación debe ser S, D o T.");
+          continue;
+        }
+
+        tipoHabitacion[i] = habitacionTipo;
+        break;
+      }
+
+      while (true) {
+        System.out.print("Estado de la habitación (L=Libre, O=Ocupada, M=Mantenimiento): ");
+        char habitacionEstado = input.next().toUpperCase().charAt(0);
+
+        if (habitacionEstado != 'L' && habitacionEstado != 'O' && habitacionEstado != 'M') {
+          System.out.println("Error: El estado de la habitación debe ser L, O o M.");
+          continue;
+        }
+
+        estado[i] = habitacionEstado;
+        break;
+      }
+
+      while (true) {
+        System.out.print("Número total de servicios: ");
+
+        while (!input.hasNextInt()) {
+          System.out.println("Error: Ingrese un número entero válido.");
+          System.out.print("Número total de servicios: ");
+          input.next();
+        }
+
+        int habitacionServicios = input.nextInt();
+
+        if (habitacionServicios < 0 || habitacionServicios > 100) {
+          System.out.println("Error: El número total de servicios debe ser mayor o igual a 0 y menor o igual a 100.");
+          continue;
+        }
+
+        nTotalServicios[i] = habitacionServicios;
+        break;
+      }
+
+      switch (tipoHabitacion[i]) {
+        case 'S':
+          ingresoTotalHabitacion[i] += 100;
+          break;
+        case 'D':
+          ingresoTotalHabitacion[i] += 150;
+          break;
+        case 'T':
+          ingresoTotalHabitacion[i] += 250;
+          break;
+      }
     }
+
+    return cantidadHabitaciones;
   }
 
-  public static void reportarDatos() {
+  public static void reportarDatos(int[] idHabitacion, String[] nombreHabitacion, char[] tipoHabitacion, char[] estado,
+      int[] nTotalServicios, double[] ingresoTotalHabitacion, int cantidadHabitaciones) {
+    limpiarPantalla();
 
+    for (int i = 0; i < cantidadHabitaciones; i++) {
+      System.out.println("Id de la habitación: " + idHabitacion[i]);
+      System.out.println("Nombre de la habitación: " + nombreHabitacion[i]);
+      System.out.println("Tipo de habitación: " + tipoHabitacion[i]);
+      System.out.println("Estado de la habitación: " + estado[i]);
+      System.out.println("Número total de servicios: " + nTotalServicios[i]);
+      System.out.println("Ingreso total de la habitación: " + ingresoTotalHabitacion[i]);
+      System.out.println();
+    }
   }
 
   public static void agregarDatos() {
