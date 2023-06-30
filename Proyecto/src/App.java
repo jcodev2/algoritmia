@@ -32,39 +32,25 @@ import java.util.Scanner;
 
 public class App {
   static Scanner input = new Scanner(System.in);
-  static int[] idHabitacion = new int[100];
-  static String[] nombreHabitacion = new String[100];
-  static char[] tipoHabitacion = new char[100];
-  static char[] estado = new char[100];
-  static int[] nTotalServicios = new int[100];
-  static double[] montoHabitacion = new double[100];
-  static double[] ingresoTotalHabitacion = new double[100];
-  static String[] nombreCliente = new String[100];
-  static String[] ciudadOrigen = new String[100];
-  static double[] costoHabitacion = new double[100];
-  static String[] fecha = new String[100];
+  static int max = 100;
+  static int[] idHabitacion = new int[max];
+  static String[] nombreHabitacion = new String[max];
+  static char[] tipoHabitacion = new char[max];
+  static char[] estado = new char[max];
+  static int[] nTotalServicios = new int[max];
+  static double[] montoHabitacion = new double[max];
+  static String[] nombreCliente = new String[max];
+  static String[] ciudadOrigen = new String[max];
+  static double[] costoHabitacion = new double[max];
+  static String[] fecha = new String[max];
   static int cantidadHabitaciones = 0;
-  static int costoFinal = 0;
+  static double costoFinal = 0;
 
   public static void main(String[] args) throws Exception {
     boolean salir = false;
 
     while (!salir) {
-      System.out.println("\nSistema de reserva de un hotel");
-      System.out.println("1. Ingresar datos de N habitaciones de hotel");
-      System.out.println("2. Reportar todos los datos");
-      System.out.println("3. Agregar datos");
-      System.out.println("4. Modificar datos por IdHabitación");
-      System.out.println("5. Eliminar datos Nombre Habitación");
-      System.out.println("6. Consultar por nombre de habitación");
-      System.out.println("7. Consultar por IdHabitación");
-      System.out.println("8. Ordenar los datos alfabéticamente en forma ascendente por nombre de habitación");
-      System.out.println("9. Ordenar en forma descendente por IdHabitación");
-      System.out.println("10. Reserva de habitación");
-      System.out.println("11. Fin de servicio");
-      System.out.println("12. Terminar el programa");
-      System.out.print("Ingrese una opción: ");
-      int opcion = input.nextInt();
+      int opcion = menu();
 
       switch (opcion) {
         case 1:
@@ -102,7 +88,7 @@ public class App {
           reservarHabitacion();
           break;
         case 11:
-          // finDeServicio();
+          finDeServicio();
           break;
         case 12:
           salir = true;
@@ -114,7 +100,34 @@ public class App {
     }
   }
 
+  public static int menu() {
+    System.out.println("\nSistema de reserva de un hotel");
+    System.out.println("1. Ingresar datos de N habitaciones de hotel");
+    System.out.println("2. Reportar todos los datos");
+    System.out.println("3. Agregar datos");
+    System.out.println("4. Modificar datos por IdHabitación");
+    System.out.println("5. Eliminar datos Nombre Habitación");
+    System.out.println("6. Consultar por nombre de habitación");
+    System.out.println("7. Consultar por IdHabitación");
+    System.out.println("8. Ordenar los datos alfabéticamente en forma ascendente por nombre de habitación");
+    System.out.println("9. Ordenar en forma descendente por IdHabitación");
+    System.out.println("10. Reserva de habitación");
+    System.out.println("11. Fin de servicio");
+    System.out.println("12. Terminar el programa");
+    System.out.print("Ingrese una opción: ");
+    int opcion = input.nextInt();
+
+    return opcion;
+  }
+
+  public static void limpiarPantalla() {
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
+  }
+
   public static int ingresarDatos(int cantidadHabitaciones) {
+    limpiarPantalla();
+
     System.out.print("\nIngrese la cantidad de habitaciones que desea ingresar: ");
     cantidadHabitaciones = input.nextInt();
 
@@ -139,6 +152,12 @@ public class App {
           System.out.println("El Id de la habitación ya existe");
           System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
           idHabitacion[i] = input.nextInt();
+
+          while (idHabitacion[i] < 10 || idHabitacion[i] > 99) {
+            System.out.println("El Id de la habitación debe ser mayor o igual a 10 y menor a 100");
+            System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
+            idHabitacion[i] = input.nextInt();
+          }
         }
       }
 
@@ -168,15 +187,6 @@ public class App {
         tipoHabitacion[i] = input.next().toUpperCase().charAt(0);
       }
 
-      System.out.print("Ingrese el estado de la habitación (L = libre, O = ocupada): ");
-      estado[i] = input.next().toUpperCase().charAt(0);
-
-      while (estado[i] != 'L' && estado[i] != 'O') {
-        System.out.println("El estado de la habitación debe ser L u O");
-        System.out.print("Ingrese el estado de la habitación (L = libre, O = ocupada): ");
-        estado[i] = input.next().toUpperCase().charAt(0);
-      }
-
       System.out.print("Ingrese el número total de servicios: ");
       nTotalServicios[i] = input.nextInt();
 
@@ -188,21 +198,47 @@ public class App {
 
       switch (tipoHabitacion[i]) {
         case 'S':
-          montoHabitacion[i] = 100;
+          // si hay 0 servicios, el monto de cada habitación simple es 100
+          if (nTotalServicios[i] == 0) {
+            montoHabitacion[i] = 100;
+          } else {
+            // si hay 1 o más servicios, el monto de cada habitación simple es 100 + 50 por
+            // cada servicio
+            montoHabitacion[i] = 100 + (nTotalServicios[i] * 50);
+          }
           break;
         case 'D':
-          montoHabitacion[i] = 150;
+          // si hay 0 servicios, el monto de cada habitación doble es 150
+          if (nTotalServicios[i] == 0) {
+            montoHabitacion[i] = 150;
+          } else {
+            // si hay 1 o más servicios, el monto de cada habitación doble es 150 + 50 por
+            // cada servicio
+            montoHabitacion[i] = 150 + (nTotalServicios[i] * 50);
+          }
           break;
         case 'T':
-          montoHabitacion[i] = 250;
+          // si hay 0 servicios, el monto de cada habitación triple es 250
+          if (nTotalServicios[i] == 0) {
+            montoHabitacion[i] = 250;
+          } else {
+            // si hay 1 o más servicios, el monto de cada habitación triple es 250 + 50 por
+            // cada servicio
+            montoHabitacion[i] = 250 + (nTotalServicios[i] * 50);
+          }
           break;
       }
+
+      // hacer que todas las habitaciones tenga el estado inicial de L
+      estado[i] = 'L';
     }
 
     return cantidadHabitaciones;
   }
 
   public static void reportarDatos() {
+    limpiarPantalla();
+
     if (cantidadHabitaciones == 0) {
       System.out.println("\nNo hay datos ingresados");
     } else {
@@ -235,6 +271,12 @@ public class App {
           System.out.println("El Id de la habitación ya existe");
           System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
           idHabitacion[cantidadHabitaciones] = input.nextInt();
+
+          while (idHabitacion[cantidadHabitaciones] < 10 || idHabitacion[cantidadHabitaciones] > 99) {
+            System.out.println("El Id de la habitación debe ser mayor o igual a 10 y menor a 100");
+            System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
+            idHabitacion[cantidadHabitaciones] = input.nextInt();
+          }
         }
       }
 
@@ -266,15 +308,6 @@ public class App {
         tipoHabitacion[cantidadHabitaciones] = input.next().toUpperCase().charAt(0);
       }
 
-      System.out.print("Ingrese el estado de la habitación (L = libre, O = ocupada): ");
-      estado[cantidadHabitaciones] = input.next().toUpperCase().charAt(0);
-
-      while (estado[cantidadHabitaciones] != 'L' && estado[cantidadHabitaciones] != 'O') {
-        System.out.println("El estado de la habitación debe ser L u O");
-        System.out.print("Ingrese el estado de la habitación (L = libre, O = ocupada): ");
-        estado[cantidadHabitaciones] = input.next().toUpperCase().charAt(0);
-      }
-
       System.out.print("Ingrese el número total de servicios: ");
       nTotalServicios[cantidadHabitaciones] = input.nextInt();
 
@@ -286,15 +319,38 @@ public class App {
 
       switch (tipoHabitacion[cantidadHabitaciones]) {
         case 'S':
-          montoHabitacion[cantidadHabitaciones] = 100;
+          // si hay 0 servicios, el monto de cada habitación simple es 100
+          if (nTotalServicios[cantidadHabitaciones] == 0) {
+            montoHabitacion[cantidadHabitaciones] = 100;
+          } else {
+            // si hay 1 o más servicios, el monto de cada habitación simple es 100 + 50 por
+            // cada servicio
+            montoHabitacion[cantidadHabitaciones] = 100 + (nTotalServicios[cantidadHabitaciones] * 50);
+          }
           break;
         case 'D':
-          montoHabitacion[cantidadHabitaciones] = 150;
+          // si hay 0 servicios, el monto de cada habitación doble es 150
+          if (nTotalServicios[cantidadHabitaciones] == 0) {
+            montoHabitacion[cantidadHabitaciones] = 150;
+          } else {
+            // si hay 1 o más servicios, el monto de cada habitación doble es 150 + 50 por
+            // cada servicio
+            montoHabitacion[cantidadHabitaciones] = 150 + (nTotalServicios[cantidadHabitaciones] * 50);
+          }
           break;
         case 'T':
-          montoHabitacion[cantidadHabitaciones] = 250;
+          // si hay 0 servicios, el monto de cada habitación triple es 250
+          if (nTotalServicios[cantidadHabitaciones] == 0) {
+            montoHabitacion[cantidadHabitaciones] = 250;
+          } else {
+            // si hay 1 o más servicios, el monto de cada habitación triple es 250 + 50 por
+            // cada servicio
+            montoHabitacion[cantidadHabitaciones] = 250 + (nTotalServicios[cantidadHabitaciones] * 50);
+          }
           break;
       }
+
+      estado[cantidadHabitaciones] = 'L';
 
       cantidadHabitaciones++;
     }
@@ -352,24 +408,23 @@ public class App {
     if (cantidadHabitaciones == 0) {
       System.out.println("\nNo hay datos ingresados");
     } else {
-      System.out.print("\nIngrese el Id de la habitación a eliminar (2 dígitos): ");
-      int id = input.nextInt();
+      System.out.print("\nIngrese el Nombre de la habitación a eliminar: ");
+      String nombre = input.next().toUpperCase().trim();
 
-      while (id < 10 || id > 99) {
-        System.out.println("El Id de la habitación debe ser mayor o igual a 10 y menor a 100");
-        System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
-        id = input.nextInt();
+      while (nombre.length() < 2 || nombre.length() > 30) {
+        System.out.println("El nombre de la habitación debe tener entre 2 y 30 caracteres");
+        System.out.print("Ingrese el Nombre de la habitación a eliminar: ");
+        nombre = input.next().toUpperCase().trim();
       }
 
       int i = 0;
-      while (i < cantidadHabitaciones && id != idHabitacion[i]) {
+
+      while (i < cantidadHabitaciones && !nombre.equals(nombreHabitacion[i])) {
         i++;
       }
 
       if (i == cantidadHabitaciones) {
-        System.out.println("\nEl Id de la habitación no existe");
-      } else if (estado[i] == 'O') {
-        System.out.println("\nLa habitación no se puede eliminar porque está ocupada");
+        System.out.println("\nEl nombre de la habitación no existe");
       } else {
         for (int j = i; j < cantidadHabitaciones - 1; j++) {
           idHabitacion[j] = idHabitacion[j + 1];
@@ -381,6 +436,8 @@ public class App {
         }
 
         cantidadHabitaciones--;
+
+        System.out.println("\nHabitación eliminada");
       }
     }
   }
@@ -448,6 +505,8 @@ public class App {
   }
 
   public static void ordenarAlfabeticamentePorNombreHabitacion() {
+    limpiarPantalla();
+
     if (cantidadHabitaciones == 0) {
       System.out.println("\nNo hay datos ingresados");
     } else {
@@ -486,6 +545,8 @@ public class App {
   }
 
   public static void ordenarDescendentementePorIdHabitacion() {
+    limpiarPantalla();
+
     if (cantidadHabitaciones == 0) {
       System.out.println("\nNo hay datos ingresados");
     } else {
@@ -524,12 +585,21 @@ public class App {
   }
 
   public static void reservarHabitacion() {
+    limpiarPantalla();
+
     if (cantidadHabitaciones == 0) {
       System.out.println("\nNo hay datos ingresados");
     } else {
       System.out.println("\nIngrese el tipo de habitación que desea (S: Simple, D: Doble, T: Triple): ");
       char tipoHabitacionDeseada = input.next().toUpperCase().charAt(0);
-      System.out.println("\nIngrese la fecha de reserva (dd/mm/yyyy): "); // ejemplo: 01/01/2021
+
+      while (tipoHabitacionDeseada != 'S' && tipoHabitacionDeseada != 'D' && tipoHabitacionDeseada != 'T') {
+        System.out.println("\nTipo de habitación inválido");
+        System.out.println("\nIngrese el tipo de habitación que desea (S: Simple, D: Doble, T: Triple): ");
+        tipoHabitacionDeseada = input.next().toUpperCase().charAt(0);
+      }
+
+      System.out.println("\nIngrese la fecha de reserva (dd/mm/yyyy): "); // ejemplo: 02/03/2024
       String fechaReserva = input.next();
 
       int habitacionesDisponibles = 0;
@@ -548,35 +618,84 @@ public class App {
       if (habitacionesDisponibles == 0) {
         System.out.println("\nNo hay habitaciones disponibles para el tipo de habitación deseada");
       } else {
-        System.out.println("\nIngrese el Id de la habitación deseada: ");
-        int idHabitacionDeseada = input.nextInt();
+        int idHabitacionDeseada = 0;
+        boolean idValido = false;
+        while (!idValido) {
+          System.out.println("\nIngrese el Id de la habitación deseada: ");
+          idHabitacionDeseada = input.nextInt();
 
-        int i = 0;
-        while (i < cantidadHabitaciones && idHabitacionDeseada != idHabitacion[i]) {
-          i++;
+          int i = 0;
+          while (i < cantidadHabitaciones && (idHabitacion[i] != idHabitacionDeseada
+              || tipoHabitacion[i] != tipoHabitacionDeseada || estado[i] != 'L')) {
+            i++;
+          }
+
+          if (i == cantidadHabitaciones) {
+            System.out.println("\nEl Id de la habitación no existe");
+          } else {
+            idValido = true;
+            estado[i] = 'O';
+
+            costoHabitacion[i] += montoHabitacion[i];
+
+            System.out.println("\nIngrese el nombre del cliente: ");
+            nombreCliente[i] = input.next();
+            System.out.println("\nIngrese la ciudad de origen del cliente: ");
+            ciudadOrigen[i] = input.next();
+
+            System.out.println("\nReserva realizada con éxito");
+            System.out.println("\nId de la habitación: " + idHabitacion[i]);
+            System.out.println("Nombre de la habitación: " + nombreHabitacion[i]);
+            System.out.println("Tipo de habitación: " + tipoHabitacion[i]);
+            System.out.println("Estado de la habitación: " + estado[i]);
+            System.out.println("Número total de servicios: " + nTotalServicios[i]);
+            System.out.println("Nombre del cliente: " + nombreCliente[i]);
+            System.out.println("Ciudad de origen del cliente: " + ciudadOrigen[i]);
+            System.out.println("Costo de la habitación: " + costoHabitacion[i]);
+            System.out.println("Fecha de reserva: " + fechaReserva);
+          }
         }
+      }
+    }
+  }
 
-        if (i == cantidadHabitaciones) {
-          System.out.println("\nEl Id de la habitación no existe");
+  public static void finDeServicio() {
+    limpiarPantalla();
+
+    if (cantidadHabitaciones == 0) {
+      System.out.println("\nNo hay datos ingresados");
+    } else {
+      System.out.println("\nIngrese el Id de la habitación: ");
+      int idHabitacionDeseada = input.nextInt();
+
+      int i = 0;
+      while (i < cantidadHabitaciones && idHabitacion[i] != idHabitacionDeseada) {
+        i++;
+      }
+
+      if (i == cantidadHabitaciones) {
+        System.out.println("\nEl Id de la habitación no existe");
+      } else {
+        if (estado[i] == 'L') {
+          System.out.println("\nLa habitación no está ocupada");
         } else {
-          estado[i] = 'O';
+          estado[i] = 'L';
 
-          System.out.println("\nIngrese el nombre del cliente: ");
-          String nombreCliente = input.next();
-          System.out.println("\nIngrese la ciudad de origen del cliente: ");
-          String ciudadOrigen = input.next();
+          // Se calcula el costo final solo de la habitación que se liberó
+          for (int j = 0; j < cantidadHabitaciones; j++) {
+            if (idHabitacion[j] == idHabitacionDeseada) {
+              costoFinal += costoHabitacion[j];
+            }
+          }
 
-          System.out.println("\nReserva realizada con éxito");
+          System.out.println("\nFin de servicio realizado con éxito");
           System.out.println("\nId de la habitación: " + idHabitacion[i]);
           System.out.println("Nombre de la habitación: " + nombreHabitacion[i]);
-          System.out.println("Tipo de habitación: " + tipoHabitacion[i]);
-          System.out.println("Estado de la habitación: " + estado[i]);
-          System.out.println("Número total de servicios: " + nTotalServicios[i]);
-          System.out.println("Costo de la habitación: " + montoHabitacion[i]);
-          System.out.println("Nombre del cliente: " + nombreCliente);
-          System.out.println("Ciudad de origen del cliente: " + ciudadOrigen);
-          System.out.println("Costo de la habitación: " + costoHabitacion);
-          System.out.println("Fecha de reserva: " + fechaReserva);
+          System.out.println("Nombre del cliente: " + nombreCliente[i]);
+          System.out.println("Ciudad de origen del cliente: " + ciudadOrigen[i]);
+          System.out.println("Cantidad de servicios: " + nTotalServicios[i]);
+          System.out.println("Monto pagado: " + costoHabitacion[i]);
+          System.out.println("Monto total recaudado: " + costoFinal);
         }
       }
     }
