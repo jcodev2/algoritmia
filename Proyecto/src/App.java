@@ -140,11 +140,13 @@ public class App {
     for (int i = 0; i < cantidadHabitaciones; i++) {
       System.out.print("\nIngrese el Id de la habitación (2 dígitos): ");
       idHabitacion[i] = input.nextInt();
+      input.nextLine();
 
       while (idHabitacion[i] < 10 || idHabitacion[i] > 99) {
         System.out.println("El Id de la habitación debe ser mayor o igual a 10 y menor a 100");
         System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
         idHabitacion[i] = input.nextInt();
+        input.nextLine();
       }
 
       for (int j = 0; j < i; j++) {
@@ -152,29 +154,31 @@ public class App {
           System.out.println("El Id de la habitación ya existe");
           System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
           idHabitacion[i] = input.nextInt();
+          input.nextLine();
 
           while (idHabitacion[i] < 10 || idHabitacion[i] > 99) {
             System.out.println("El Id de la habitación debe ser mayor o igual a 10 y menor a 100");
             System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
             idHabitacion[i] = input.nextInt();
+            input.nextLine();
           }
         }
       }
 
       System.out.print("Ingrese el nombre de la habitación: ");
-      nombreHabitacion[i] = input.next().toUpperCase().trim();
+      nombreHabitacion[i] = input.nextLine().toUpperCase().trim();
 
       while (nombreHabitacion[i].length() < 2 || nombreHabitacion[i].length() > 30) {
         System.out.println("El nombre de la habitación debe tener entre 2 y 30 caracteres");
         System.out.print("Ingrese el nombre de la habitación: ");
-        nombreHabitacion[i] = input.next().toUpperCase().trim();
+        nombreHabitacion[i] = input.nextLine().toUpperCase().trim();
       }
 
       for (int j = 0; j < i; j++) {
         while (nombreHabitacion[i].equals(nombreHabitacion[j])) {
           System.out.println("El nombre de la habitación ya existe");
           System.out.print("Ingrese el nombre de la habitación: ");
-          nombreHabitacion[i] = input.next().toUpperCase().trim();
+          nombreHabitacion[i] = input.nextLine().toUpperCase().trim();
         }
       }
 
