@@ -17,8 +17,7 @@ public class ejercicio1 {
     int[] mayoresEdad = new int[100];
     int[] menoresEdad = new int[100];
 
-    int n, contadorMayores = 0, contadorMenores = 0;
-    double promedio = 0;
+    int n, contadorMayores, contadorMenores;
 
     n = leerN();
 
