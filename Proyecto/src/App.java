@@ -28,8 +28,8 @@
   - Terminar el programa.
 */
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.InputMismatchException; // Para manejar excepciones de tipo InputMismatchException
+import java.util.Scanner; // Para leer datos de entrada del usuario
 
 public class App {
   static Scanner input = new Scanner(System.in);
@@ -52,6 +52,23 @@ public class App {
   static int[] serviciosSeleccionados = new int[10];
   static int[][] serviciosPorHabitacion = new int[max][10];
 
+  /**
+   * Método principal que ejecuta el sistema de gestión de hotel. Muestra el menú
+   * principal y ejecuta la opción seleccionada por el usuario hasta que se
+   * abandone
+   * el programa. Las opciones del menú incluyen ingresar datos de habitaciones,
+   * reportar todos los datos, agregar datos, modificar datos por IdHabitación,
+   * eliminar datos por nombre de habitación, consultar por nombre de habitación,
+   * consultar por IdHabitación, ordenar alfabéticamente por nombre de habitación,
+   * ordenar descendentemente por IdHabitación, reservar habitación, fin de
+   * servicio
+   * y abandonar el programa.
+   * 
+   * @param args Argumentos de línea de comandos (no se utilizan)
+   * @throws Exception Si ocurre un error al leer los datos de entrada del usuario
+   *                   o al escribir en la salida estándar
+   * @return void
+   */
   public static void main(String[] args) throws Exception {
     boolean salir = false;
 
@@ -107,14 +124,16 @@ public class App {
   }
 
   /**
-   * Displays a menu of options for a hotel management system.
+   * Muestra el menú principal del sistema de gestión de hotel y devuelve la
+   * opción seleccionada.
    * 
-   * @return the user's selected option
+   * @return La opción seleccionada como un número entero
    */
   public static int menu() {
     int opcion = 0;
 
     separador("Hotel UPAO");
+
     System.out.print("1. Ingresar datos de N habitaciones de hotel\n");
     System.out.print("2. Reportar todos los datos\n");
     System.out.print("3. Agregar datos\n");
@@ -129,26 +148,28 @@ public class App {
     System.out.print("12. Terminar el programa\n");
     System.out.print("Ingrese una opción: ");
 
-    // Validate that the input is a positive integer between 1 and 12
     opcion = validarEnteroPositivoEntre(1, 12, "Ingrese una opción: ");
 
     return opcion;
   }
 
   /**
-   * Clears the console screen.
+   * Limpia la pantalla de la consola.
    */
   public static void limpiarPantalla() {
-    // Use ANSI escape codes to clear the screen
     System.out.print("\033[H\033[2J");
 
-    // Flush the console output buffer to ensure that any buffered output is written
-    // to the console
     System.out.flush();
   }
 
+  /**
+   * Muestra un mensaje en la consola dependiendo de si se cumplió o no una
+   * condición.
+   * 
+   * @param condicion La condición a evaluar.
+   */
   public static void mensaje(boolean condicion) {
-    if (condicion) {
+    if (condicion == true) {
       System.out.println("\nDatos ingresados correctamente");
     } else {
       System.out.println("\nNo hay datos ingresados");
@@ -156,27 +177,31 @@ public class App {
   }
 
   /**
-   * Prompts the user to enter the number of hotel rooms.
+   * Solicita al usuario que ingrese la cantidad de habitaciones y valida que sea
+   * un número entero positivo entre 1 y 100.
    * 
-   * @return the number of hotel rooms entered by the user
+   * @return La cantidad de habitaciones ingresada por el usuario como un número
+   *         entero.
    */
   public static int leerCantidadDeHabitaciones() {
     int cantidadHabitaciones = 0;
 
     System.out.print("Ingrese la cantidad de habitaciones: ");
 
-    // Validate that the input is a positive integer between 1 and 100
     cantidadHabitaciones = validarEnteroPositivoEntre(1, 100, "Ingrese la cantidad de habitaciones: ");
 
     return cantidadHabitaciones;
   }
 
   /**
-   * Prompts the user to enter an integer value between min and max (inclusive).
+   * Valida que el valor ingresado por el usuario sea un número entero positivo
+   * entre un valor mínimo y máximo especificado. Si el valor ingresado no es
+   * válido, se solicita al usuario que ingrese un nuevo valor.
    * 
-   * @param min the minimum value allowed
-   * @param max the maximum value allowed
-   * @return the integer value entered by the user
+   * @param min     El valor mínimo permitido.
+   * @param max     El valor máximo permitido.
+   * @param message El mensaje a mostrar al usuario para solicitar el valor.
+   * @return El valor ingresado por el usuario como un número entero.
    */
   public static int validarEnteroPositivoEntre(int min, int max, String message) {
     int valor = 0;
@@ -191,9 +216,7 @@ public class App {
           System.out.printf("El valor debe estar entre %d y %d%n", min, max);
           System.out.print(message);
         }
-      }
-      // Handle the exception when the user enters a non-integer value
-      catch (InputMismatchException e) { // InputMismatchException is a subclass of Exception
+      } catch (InputMismatchException e) {
         System.out.println("El valor debe ser un número entero");
         System.out.print(message);
         input.nextLine();
@@ -203,6 +226,13 @@ public class App {
     return valor;
   }
 
+  /**
+   * Solicita al usuario que ingrese los datos de N habitaciones de hotel y los
+   * valida.
+   * 
+   * @param cantidadHabitaciones La cantidad de habitaciones a ingresar.
+   * @return La cantidad de habitaciones ingresadas.
+   */
   public static int ingresarDatos(int cantidadHabitaciones) {
     limpiarPantalla();
 
@@ -223,6 +253,12 @@ public class App {
     return cantidadHabitaciones;
   }
 
+  /**
+   * Solicita al usuario que ingrese los datos de una habitación de hotel y los
+   * valida.
+   * 
+   * @param index El índice de la habitación a ingresar.
+   */
   public static void ingresarDatosHabitacion(int index) {
     System.out.printf("%nHabitación %d%n", index + 1);
     System.out.print("Ingrese el Id de la habitación (2 dígitos): ");
@@ -251,6 +287,13 @@ public class App {
     estado[index] = 'L';
   }
 
+  /**
+   * Verifica que el ID de la habitación sea único entre todas las habitaciones
+   * ingresadas anteriormente. Si el ID no es único, solicita al usuario que
+   * ingrese un nuevo ID hasta que se ingrese uno único
+   * 
+   * @param index El índice de la habitación que se está ingresando.
+   */
   public static void validarIdHabitacionUnico(int index) {
     boolean idUnico = true;
 
@@ -278,6 +321,13 @@ public class App {
     } while (true);
   }
 
+  /**
+   * Valida y devuelve un nombre de habitación ingresado por el usuario.
+   * El nombre debe tener entre 2 y 30 caracteres de longitud.
+   * 
+   * @param prompt El mensaje para mostrar al usuario.
+   * @return El nombre de la habitación validado.
+   */
   public static String validarNombreHabitacion(String prompt) {
     String nombre = input.next().toUpperCase().trim();
 
@@ -290,6 +340,13 @@ public class App {
     return nombre;
   }
 
+  /**
+   * Verifica que el nombre de la habitación sea único entre todas las
+   * habitaciones ingresadas anteriormente. Si el nombre no es único, solicita al
+   * usuario que ingrese un nuevo nombre hasta que se ingrese uno único.
+   * 
+   * @param index El índice de la habitación que se está ingresando.
+   */
   public static void validarNombreHabitacionUnico(int index) {
     boolean nombreUnico = true;
 
@@ -311,6 +368,13 @@ public class App {
     } while (true);
   }
 
+  /**
+   * Valida y devuelve un tipo de habitación ingresado por el usuario.
+   * El tipo de habitación debe ser 'S', 'D' o 'T'.
+   * 
+   * @param prompt El mensaje para mostrar al usuario.
+   * @return El tipo de habitación validado.
+   */
   public static char validarTipoHabitacion(String prompt) {
     char tipo = input.next().toUpperCase().charAt(0);
 
@@ -323,6 +387,18 @@ public class App {
     return tipo;
   }
 
+  /**
+   * Permite al usuario seleccionar los servicios para una habitación en
+   * particular.
+   * Muestra los tipos de servicios disponibles y solicita al usuario que ingrese
+   * el tipo de servicio deseado.
+   * Verifica que el servicio ingresado sea único para la habitación y lo almacena
+   * en la matriz de servicios por habitación.
+   * Finalmente, muestra los servicios seleccionados para la habitación.
+   * 
+   * @param index El índice de la habitación para la cual se están seleccionando
+   *              los servicios.
+   */
   public static void seleccionarServicios(int index) {
     System.out.println("\nTipos de servicios");
     for (int j = 0; j < tiposServicios.length; j++) {
@@ -344,6 +420,15 @@ public class App {
     }
   }
 
+  /**
+   * Verifica que el servicio ingresado sea único para la habitación.
+   * Si el servicio no es único, solicita al usuario que ingrese un servicio
+   * diferente.
+   * 
+   * @param index El índice de la habitación para la cual se están seleccionando
+   *              los servicios.
+   * @param j     El índice del servicio que se está validando.
+   */
   public static void validarServicioUnico(int index, int j) {
     boolean servicioUnico = true;
 
@@ -366,6 +451,13 @@ public class App {
     } while (true);
   }
 
+  /**
+   * Calcula el monto total de la habitación en base a su tipo y la cantidad de
+   * servicios seleccionados.
+   * 
+   * @param index El índice de la habitación para la cual se está calculando el
+   *              monto.
+   */
   public static void calcularMontoHabitacion(int index) {
     switch (tipoHabitacion[index]) {
       case 'S':
@@ -392,6 +484,12 @@ public class App {
     }
   }
 
+  /**
+   * Verifica si una cadena de caracteres no contiene números.
+   * 
+   * @param cadena La cadena de caracteres a validar.
+   * @return true si la cadena no contiene números, false en caso contrario.
+   */
   public static boolean validarCadenaDeCaracteres(String cadena) {
     for (int i = 0; i < cadena.length(); i++) {
       if (cadena.charAt(i) >= '0' && cadena.charAt(i) <= '9') {
@@ -403,8 +501,11 @@ public class App {
   }
 
   /**
-   * Displays a report of the hotel room data that has been entered into the
-   * system.
+   * Muestra un reporte de todas las habitaciones ingresadas hasta el momento,
+   * incluyendo su id, nombre, tipo, estado, número total de servicios, servicios
+   * seleccionados (si los hay) y monto total de la habitación.
+   * Si no se han ingresado habitaciones, muestra un mensaje indicando que no se
+   * han ingresado datos.
    */
   public static void reportarDatos() {
     limpiarPantalla();
@@ -431,12 +532,26 @@ public class App {
         }
 
         System.out.print("\n- Monto total de la habitación: $" + montoHabitacion[i]);
+        System.out.println("\n");
       }
 
       separador("");
     }
   }
 
+  /**
+   * Agrega los datos de una nueva habitación al sistema, si aún no se han
+   * ingresado
+   * la cantidad máxima de habitaciones permitidas.
+   * 
+   * Si se ingresan los datos correctamente, se muestra un mensaje de confirmación
+   * y se
+   * genera un reporte de todas las habitaciones ingresadas hasta el momento.
+   * 
+   * Si se ha alcanzado la cantidad máxima de habitaciones permitidas, se muestra
+   * un
+   * mensaje indicando que no se pueden ingresar más datos.
+   */
   public static void agregarDatos() {
     if (cantidadHabitaciones == 100) {
       System.out.println("\nNo se pueden ingresar más datos");
@@ -606,6 +721,8 @@ public class App {
       }
 
       if (i == cantidadHabitaciones) {
+        limpiarPantalla();
+
         System.out.println("\nEl Nombre de la habitación no existe");
       } else {
         System.out.println("\n- Id de la habitación: " + idHabitacion[i]);

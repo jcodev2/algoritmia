@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="https://structorizer.fisch.lu" version="3.32-11" preRepeat="until " postFor="to" preReturn="return" postForIn="in" preWhile="while " output="OUTPUT" input="INPUT" preFor="for" preExit="exit" preLeave="leave" ignoreCase="true" preThrow="throw" preForIn="foreach" stepFor="by" author="DANIELA" created="2023-07-09" changedby="cchot" changed="2023-07-09" origin="Structorizer 3.32-11" text="&#34;ordenarAlfabeticamentePorNombreHabitacion&#34;" comment="" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;ordenarAlfabeticamentePorNombreHabitacion()&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;var i, j, k, auxId, auxNombre, auxTipo, auxEstado, auxNTotalServicios, auxMontoHabitacion, auxServiciosPorHabitacion &#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<alternative text="&#34;cantidadHabitaciones == 0&#34;" comment="" color="ffffff" disabled="0">
+			<qTrue>
+				<instruction text="&#34;mensaje(false)&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+			</qTrue>
+			<qFalse>
+				<for text="&#34;i = 0; i &#60; cantidadHabitaciones - 1; i++&#34;" comment="" counterVar="dummy_counter" startValue="i = 0; i &#60; cantidadHabitaciones - 1; i++" stepConst="1" style="FREETEXT" color="ffffff" disabled="0">
+					<qFor>
+						<for text="&#34;j = 0; j &#60; cantidadHabitaciones - i - 1; j++&#34;" comment="" counterVar="dummy_counter" startValue="j = 0; j &#60; cantidadHabitaciones - i - 1; j++" stepConst="1" style="FREETEXT" color="ffffff" disabled="0">
+							<qFor>
+								<alternative text="&#34;nombreHabitacion[j].compareTo(nombreHabitacion[j + 1]) &#62; 0&#34;" comment="" color="ffffff" disabled="0">
+									<qTrue>
+										<instruction text="&#34;auxId = idHabitacion[j]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;idHabitacion[j] = idHabitacion[j + 1]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;idHabitacion[j + 1] = auxId&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;auxNombre = nombreHabitacion[j]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;nombreHabitacion[j] = nombreHabitacion[j + 1]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;nombreHabitacion[j + 1] = auxNombre&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;auxTipo = tipoHabitacion[j]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;tipoHabitacion[j] = tipoHabitacion[j + 1]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;tipoHabitacion[j + 1] = auxTipo&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;auxEstado = estado[j]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;estado[j] = estado[j + 1]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;estado[j + 1] = auxEstado&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;auxNTotalServicios = nTotalServicios[j]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;nTotalServicios[j] = nTotalServicios[j + 1]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;nTotalServicios[j + 1] = auxNTotalServicios&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;auxMontoHabitacion = montoHabitacion[j]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;montoHabitacion[j] = montoHabitacion[j + 1]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;montoHabitacion[j + 1] = auxMontoHabitacion&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<for text="&#34;k = 0; k &#60; nTotalServicios[j]; k++&#34;" comment="&#34;&#34;" counterVar="dummy_counter" startValue="k = 0; k &#60; nTotalServicios[j]; k++" stepConst="1" style="FREETEXT" color="ffffff" disabled="0">
+											<qFor>
+												<instruction text="&#34;auxServiciosPorHabitacion = serviciosPorHabitacion[j][k]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+												<instruction text="&#34;serviciosPorHabitacion[j][k] = serviciosPorHabitacion[j + 1][k]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+												<instruction text="&#34;serviciosPorHabitacion[j + 1][k] = auxServiciosPorHabitacion&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+											</qFor>
+										</for>
+									</qTrue>
+									<qFalse color="ffffff">
+									</qFalse>
+								</alternative>
+							</qFor>
+						</for>
+					</qFor>
+				</for>
+			</qFalse>
+		</alternative>
+		<instruction text="&#34;mensaje(true)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;reportarDatos()&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;retornar&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+	</children>
+</root>

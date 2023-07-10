@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="https://structorizer.fisch.lu" version="3.32-11" preRepeat="until " postFor="to" preReturn="return" postForIn="in" preWhile="while " output="OUTPUT" input="INPUT" preFor="for" preExit="exit" preLeave="leave" ignoreCase="true" preThrow="throw" preForIn="foreach" stepFor="by" namespace="" author="cchot" created="2023-07-09" changedby="cchot" changed="2023-07-09" origin="Structorizer 3.32-11" text="&#34;reportarDatos&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;reportarDatos()&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;var i&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<alternative text="&#34;cantidadHabitaciones == 0&#34;" comment="&#34;&#34;" color="ffffff" disabled="0">
+			<qTrue>
+				<instruction text="&#34;Escribir &#34;&#34;No se han ingresado datos&#34;&#34;&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+			</qTrue>
+			<qFalse>
+				<instruction text="&#34;separador(&#34;&#34;Reporte de Habitaciones&#34;&#34;)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<for text="&#34;i = 0; i &#60; cantidadHabitaciones; i++&#34;" comment="&#34;&#34;" counterVar="dummy_counter" startValue="i = 0; i &#60; cantidadHabitaciones; i++" stepConst="1" style="FREETEXT" color="ffffff" disabled="0">
+					<qFor>
+						<instruction text="&#34;Escribir &#34;&#34;Habitacion&#34;&#34; + (i+1)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;Escribir idHabitacion[i]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;Escribir nombreHabitacion[i]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;Escribir tipoHabitacion[i]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;Escribir estado[i]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;Escribir nTotalServicios[i]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;nTotalServicios[i] &#62; 0 &#34;" comment="&#34;&#34;" color="ffffff" disabled="0">
+							<qTrue>
+								<for text="&#34;j = 0; j &#60; nTotalServicios[i]; j++&#34;" comment="&#34;&#34;" counterVar="dummy_counter" startValue="j = 0; j &#60; nTotalServicios[i]; j++" stepConst="1" style="FREETEXT" color="ffffff" disabled="0">
+									<qFor>
+										<instruction text="&#34;Escribir tipoServicios[serviciosPorHabitacion[i][j] - 1]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+									</qFor>
+								</for>
+							</qTrue>
+							<qFalse color="ffffff">
+							</qFalse>
+						</alternative>
+						<instruction text="&#34;Escribir montoHabitacion[i]&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qFor>
+				</for>
+				<instruction text="&#34;separador(&#34;&#34;&#34;&#34;)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+			</qFalse>
+		</alternative>
+		<instruction text="&#34;retornar&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+	</children>
+</root>
